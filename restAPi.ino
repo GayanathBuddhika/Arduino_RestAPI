@@ -6,10 +6,22 @@
 #define WIFI_RETRY_DELAY 500
 #define MAX_WIFI_INIT_RETRY 50
 
-struct Led {
+struct Led { 
     byte id;
-    byte gpio;
-    byte abc;
+    byte ida;
+    byte idb;
+    byte idc;
+    byte idd;
+    byte ide;
+    byte idf;
+    byte idg;
+    byte idh;
+    byte idi;
+    byte idj;
+    byte idk;
+    byte idl;
+    byte idm;
+    byte idn;
 } led_resource;
 
 const char* wifi_ssid = "gaya_SLT";
@@ -18,10 +30,22 @@ const char* wifi_passwd = "gaya1993";
 ESP8266WebServer http_rest_server(HTTP_REST_PORT);
 
 void init_led_resource()
-{
-    led_resource.id = 10;
-    led_resource.gpio = 20;
-    led_resource.abc = 30;
+{    
+    led_resource.id = 1;
+//    led_resource.ida = 10;
+    led_resource.idb= 20;
+    led_resource.idc = 30;
+    led_resource.idd = 40;
+    led_resource.ide = 50;
+    led_resource.idf = 60;
+    led_resource.idg = 70;
+    led_resource.idh = 80;
+    led_resource.idi = 90;
+    led_resource.idj = 100;
+    led_resource.idk = 110;
+    led_resource.idl = 120;
+    led_resource.idm = 130;
+    led_resource.idn = 140;
 }
 
 int init_wifi() {
@@ -48,28 +72,65 @@ void get_leds() {
     if (led_resource.id == 0)
         http_rest_server.send(204);
     else {
-        jsonObj["id"] = led_resource.id;
-        jsonObj["gpio"] = led_resource.gpio;
-        jsonObj["abc"] = led_resource.abc;
+//        jsonObj["ida"] = led_resource.ida;
+        jsonObj["idb"] = led_resource.idb;
+        jsonObj["idc"] = led_resource.idc;
+        jsonObj["idd"] = led_resource.idd;
+        jsonObj["ide"] = led_resource.ide;
+        jsonObj["idf"] = led_resource.idf;
+        jsonObj["idg"] = led_resource.idg;
+        jsonObj["idh"] = led_resource.idh;
+        jsonObj["idi"] = led_resource.idi;
+        jsonObj["idj"] = led_resource.idj;
+        jsonObj["idk"] = led_resource.idk;
+        jsonObj["idl"] = led_resource.idl;
+        jsonObj["idm"] = led_resource.idm;
+        jsonObj["idn"] = led_resource.idn;
         jsonObj.prettyPrintTo(JSONmessageBuffer, sizeof(JSONmessageBuffer));
         http_rest_server.send(200, "application/json", JSONmessageBuffer);
     }
 }
 
 void json_to_resource(JsonObject& jsonBody) {
-    int id, gpio, abc;
+    int ida, idb, idc, idd, ide, idf, idg, idh, idi, idj, idk, idl, idm, idn;
+   
+    ida = jsonBody["ida"];
+    idb = jsonBody["idb"];
+    idc = jsonBody["idc"];
+    idd = jsonBody["idd"];
+    ide = jsonBody["ide"];
+    idf = jsonBody["idf"];
+    idg = jsonBody["idg"];
+    idh = jsonBody["idh"];
+    idi = jsonBody["idi"];
+    idj = jsonBody["idj"];
+    idk = jsonBody["idk"];
+    idl = jsonBody["idl"];
+    idm = jsonBody["idm"];
+    idn = jsonBody["idn"];
+   
+    
+ 
 
-    id = jsonBody["id"];
-    gpio = jsonBody["gpio"];
-    abc = jsonBody["abc"];
+//    Serial.println(id);
+//    Serial.println(gpio);
+//    Serial.println(abc);
 
-    Serial.println(id);
-    Serial.println(gpio);
-    Serial.println(abc);
-
-    led_resource.id = id;
-    led_resource.gpio = gpio;
-    led_resource.abc = abc;
+    led_resource.ida = ida;
+    led_resource.idb = idb;
+    led_resource.idc = idc;
+    led_resource.idd = idd;
+    led_resource.ide = ide;
+    led_resource.idf = idf;
+    led_resource.idg = idg;
+    led_resource.idh = idh;
+    led_resource.idi = idi;
+    led_resource.idj = idj;
+    led_resource.idk = idk;
+    led_resource.idl = idl;
+    led_resource.idm = idm;
+    led_resource.idn = idn;
+   
 }
 
 //void post_put_leds() {
