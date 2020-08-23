@@ -27,31 +27,45 @@ struct Led {
 const char* wifi_ssid = "gaya_SLT";
 const char* wifi_passwd = "gaya1993";
 
+// Set your Static IP address
+IPAddress local_IP(192, 168, 1, 10);
+// Set your Gateway IP address
+IPAddress gateway(192, 168, 1, 1);
+
+IPAddress subnet(255, 255, 0, 0);
+IPAddress primaryDNS(8, 8, 8, 8);   //optional
+IPAddress secondaryDNS(8, 8, 4, 4); //optional
+
 ESP8266WebServer http_rest_server(HTTP_REST_PORT);
 
 void init_led_resource()
 {    
     led_resource.id = 1;
-//    led_resource.ida = 10;
-    led_resource.idb= 20;
-    led_resource.idc = 30;
-    led_resource.idd = 40;
-    led_resource.ide = 50;
-    led_resource.idf = 60;
-    led_resource.idg = 70;
-    led_resource.idh = 80;
-    led_resource.idi = 90;
-    led_resource.idj = 100;
-    led_resource.idk = 110;
-    led_resource.idl = 120;
-    led_resource.idm = 130;
-    led_resource.idn = 140;
+    led_resource.ida = 63;
+    led_resource.idb = 1;
+    led_resource.idc = 3;
+    led_resource.idd = 145;
+    led_resource.ide = 233;
+    led_resource.idf = 1;
+    led_resource.idg = 0;
+    led_resource.idh = 150;
+    led_resource.idi = 0;
+    led_resource.idj = 2.3;
+    led_resource.idk = 0;
+    led_resource.idl = 0;
+    led_resource.idm = 1;
+//    led_resource.idn = 140;
 }
 
 int init_wifi() {
     int retries = 0;
 
     Serial.println("Connecting to WiFi AP..........");
+    
+      // Configures static IP address
+      if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
+        Serial.println("STA Failed to configure");
+      }
 
     WiFi.mode(WIFI_STA);
     WiFi.begin(wifi_ssid, wifi_passwd);
@@ -72,7 +86,7 @@ void get_leds() {
     if (led_resource.id == 0)
         http_rest_server.send(204);
     else {
-//        jsonObj["ida"] = led_resource.ida;
+        jsonObj["ida"] = led_resource.ida;
         jsonObj["idb"] = led_resource.idb;
         jsonObj["idc"] = led_resource.idc;
         jsonObj["idd"] = led_resource.idd;
@@ -80,6 +94,32 @@ void get_leds() {
         jsonObj["idf"] = led_resource.idf;
         jsonObj["idg"] = led_resource.idg;
         jsonObj["idh"] = led_resource.idh;
+//        jsonObj["idi"] = led_resource.idi;
+//        jsonObj["idj"] = led_resource.idj;
+//        jsonObj["idk"] = led_resource.idk;
+//        jsonObj["idl"] = led_resource.idl;
+//        jsonObj["idm"] = led_resource.idm;
+//        jsonObj["idn"] = led_resource.idn;
+        jsonObj.prettyPrintTo(JSONmessageBuffer, sizeof(JSONmessageBuffer));
+        http_rest_server.send(200, "application/json", JSONmessageBuffer);
+    }
+}
+void get_leds2() {
+    StaticJsonBuffer<200> jsonBuffer;
+    JsonObject& jsonObj = jsonBuffer.createObject();
+    char JSONmessageBuffer[200];
+
+    if (led_resource.id == 0)
+        http_rest_server.send(204);
+    else {
+//        jsonObj["ida"] = led_resource.ida;
+//        jsonObj["idb"] = led_resource.idb;
+//        jsonObj["idc"] = led_resource.idc;
+//        jsonObj["idd"] = led_resource.idd;
+//        jsonObj["ide"] = led_resource.ide;
+//        jsonObj["idf"] = led_resource.idf;
+//        jsonObj["idg"] = led_resource.idg;
+//        jsonObj["idh"] = led_resource.idh;
         jsonObj["idi"] = led_resource.idi;
         jsonObj["idj"] = led_resource.idj;
         jsonObj["idk"] = led_resource.idk;
@@ -108,13 +148,7 @@ void json_to_resource(JsonObject& jsonBody) {
     idl = jsonBody["idl"];
     idm = jsonBody["idm"];
     idn = jsonBody["idn"];
-   
-    
- 
 
-//    Serial.println(id);
-//    Serial.println(gpio);
-//    Serial.println(abc);
 
     led_resource.ida = ida;
     led_resource.idb = idb;
@@ -179,6 +213,7 @@ void config_rest_server_routing() {
             "Welcome to the ESP8266 REST Web Server");
     });
     http_rest_server.on("/sens", HTTP_GET, get_leds);
+    http_rest_server.on("/sens2", HTTP_GET, get_leds2);
 //    http_rest_server.on("/leds", HTTP_POST, post_put_leds);
 //    http_rest_server.on("/leds", HTTP_PUT, post_put_leds);
 }
